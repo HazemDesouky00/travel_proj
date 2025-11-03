@@ -13,11 +13,12 @@ const createTripTable = `CREATE TABLE IF NOT EXISTS TRIP (
     MEALCOST REAL DEFAULT 0,
     VISACOST REAL DEFAULT 0,
     TRANSPORTATIONCOST REAL DEFAULT 0,
-    CURRENCYCODE TEXT DEFAULT N/A
+    CURRENCYCODE TEXT DEFAULT 'N/A'
 );`
 
-module.export = {
+
+module.exports= {
     db,
     createTripTable
     
-}
+};

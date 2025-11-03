@@ -1,7 +1,7 @@
 const express=require ('express');
 const{
     createTrip,
-    retrieveAllTrips,
+    retrieveAllTrips
     // retrieveTripById,
     // updateTripById,
 }=require ('../controllers/TripController');
@@ -9,8 +9,13 @@ const tripRouter=express.Router();
 
 tripRouter
 .route('/')
+.post(createTrip)
+.get(retrieveAllTrips);
+
+/*tripRouter
+.route('/')
 .get(retrieveAllTrips)
-.post(createTrip);
+.post(createTrip);*/
 
 // tripRouter.route('/:id') //api/v1/trips/:id
 // .get(retrieveTripById)

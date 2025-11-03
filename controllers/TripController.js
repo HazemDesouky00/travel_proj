@@ -8,12 +8,14 @@ const createTrip = (req,res) =>{
     currencyCode='N/A'
   }=req.body;
 
-  if (!destinationName || !location || !continenet || !language || !description){
+  /*if (!destinationName || !location || !continenet || !language || !description)
+    {
     return res.status(400).json({
       message:
       'Missing required fields: destinationName, location, continent, language and description are mandatory.'
     });
-  }
+  }*/
+
   const query = `
     INSERT INTO TRIP (
       DESTINATIONNAME, LOCATION, CONTINENT, LANGUAGE, DESCRIPTION,
@@ -45,12 +47,13 @@ const retrieveAllTrips = (req,res) => {
       console.log (err);
       return res.status(500).json({
         message: 'Error retrieving trips'
-      })
+      });
+    }
       return res.status(200).json ({
         message: 'Trips retrieved successfully',
         data: rows 
       });
-    }
+    
   }) 
 };
 
@@ -128,5 +131,5 @@ const retrieveAllTrips = (req, res) => {
 
 module.exports = {
     retrieveAllTrips,
-    createTrip
-}
+    createTrip,
+};
