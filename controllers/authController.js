@@ -35,24 +35,51 @@ const signUp = (req,res) => {
 };
 
 
+const signToken=(id,role) => {
+    return jwt.sign({id,role}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN});
+}
+
 //login function 
 const login = (req,res) => {
-    const {email,password} = req.body 
+    const email= req.body.email;
+    const password =req.body.password; 
+
+
 
     if (!email || !password )
         return res.status(400).send ('Please provide both email and password.');
 
-    const query = `SELECT * FROM USER WHERE =?`
-    db.get (query, [email], (err,user) => {
+    const query = `SELECT * FROM USER WHERE ='${email}'`
+    db.get (query, (err,row) => {
         if (err) {
             console.log(err);
             return res.status(500).send('Database error.');
         }
 
-    if (!user) return res.status(404).send('User not found.');
+    if (!row) return res.status(404).send('User not found.');
+
+    bcrypt.compare(password,row.PASSWORD),(err,isMatch) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error verifying password.');
+        }
+        const token =signToken(row.ID, row.ROLE);
+        return res.status(200).json({
+            message: 'Login successful',
+            user: {
+                id:row.ID,
+                name: row.NAME,
+                email:row.EMAIL,
+                role:row.ROLE 
+            },
+            token,
+        
+
+        })
+    }
 
 
-    
+
     })
 
 }
