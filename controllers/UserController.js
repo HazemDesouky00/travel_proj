@@ -18,8 +18,12 @@ const createUser = (req,res) =>{
         INSERT INTO USER (
         NAME, EMAIL, PASSWORD, USERROLE
         )
-        VALUES ('${name}','${email}','${password}',
-        '${userRole}')`;
+        VALUES (?, ?, ?, ?)`;
+
+    const params = [
+         name, email , password,
+        userRole
+    ]
     db.run (query,(err) => {
         if (err) {
             console.log(err);

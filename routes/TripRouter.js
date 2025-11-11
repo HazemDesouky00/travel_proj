@@ -8,7 +8,6 @@ const{
 const tripRouter=express.Router();
 
 tripRouter
-.route('/')
 .post(createTrip)
 .get(retrieveAllTrips);
 

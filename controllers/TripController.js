@@ -21,9 +21,11 @@ const createTrip = (req,res) =>{
       DESTINATIONNAME, LOCATION, CONTINENT, LANGUAGE, DESCRIPTION,
       FLIGHTCOST, ACCOMODATIONCOST, MEALCOST, VISACOST, TRANSPORTATIONCOST, CURRENCYCODE
       )
-      VALUES ('${destinationName}','${location}','${continenet}','${language}',
-      '${description}','${flightCost}','${accomodationCost}','${mealCost}','${visaCost}',
-      '${transportationCost}','${currencyCode}')`;
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  const params = [destinationName, location, continenet, language ,
+      description ,flightCost, accomodationCost ,mealCost ,visaCost,
+      transportationCost, currencyCode]
     
   db.run(query,(err) => {
       if (err) {

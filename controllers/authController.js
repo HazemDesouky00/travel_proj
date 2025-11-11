@@ -1,5 +1,6 @@
 const bcrypt = require ('bcryptjs') 
 const { db } = require('../db.js');
+const jwt =require("jsonwebtoken");
 
 const signUp = (req,res) => {
     const name = req.body.name
@@ -17,8 +18,11 @@ const signUp = (req,res) => {
         }
         const query =`
         INSERT INTO USER (NAME, EMAIL, ROLE, PASSWORD)
-        VALUES ('${name}', '${email}', '${role}', '${hashedPassword}')
+        VALUES (?, ?, ?, ?)
         `;
+
+        const params =[ name, email, role, hashedPassword
+        ]
         db.run (query, (err) => {
             if (err) {
                 if (err.message.includes('UNIQUE constraint')) {
@@ -34,7 +38,7 @@ const signUp = (req,res) => {
     
 };
 
-
+//123+id+role+sifjsfjdffsf=fkfkf
 const signToken=(id,role) => {
     return jwt.sign({id,role}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_EXPIRES_IN});
 }
@@ -56,12 +60,12 @@ const login = (req,res) => {
             return res.status(500).send('Database error.');
         }
 
-    if (!row) return res.status(404).send('User not found.');
+        if (!row) return res.status(404).send('User not found.');
 
-    bcrypt.compare(password,row.PASSWORD),(err,isMatch) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send('Error verifying password.');
+        bcrypt.compare(password,row.PASSWORD),(err,isMatch) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Error verifying password.');
         }
         const token =signToken(row.ID, row.ROLE);
         return res.status(200).json({
@@ -73,13 +77,11 @@ const login = (req,res) => {
                 role:row.ROLE 
             },
             token,
-        
-
         })
     }
-
 
 
     })
 
 }
+module.exports={login, signUp}
